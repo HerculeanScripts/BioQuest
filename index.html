@@ -1,52 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Supabase + Vercel Demo</title>
+  <title>Supabase Test</title>
 </head>
 <body>
-  <h1>Message Board</h1>
+  <h1>Supabase + Vercel Test</h1>
+  <button id="load">Load Data</button>
+  <pre id="output"></pre>
 
-  <form id="msgForm">
-    <input id="msgInput" placeholder="Type a message" required>
-    <button type="submit">Send</button>
-  </form>
-
-  <h2>Messages</h2>
-  <ul id="msgList"></ul>
-
-  <!-- Supabase client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = "https://vcdntubrkdrgixymkeod.supabase.co";   // replace
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZG50dWJya2RyZ2l4eW1rZW9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0MzIwMTQsImV4cCI6MjA3MjAwODAxNH0.qdrhEN0Jeb0r9JaBgGX-pXNr86L-ynKK_5qpX_sEMRQ";      // replace
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const form = document.getElementById('msgForm');
-    const input = document.getElementById('msgInput');
-    const list = document.getElementById('msgList');
-
-    async function loadMessages() {
-      const { data, error } = await supabase
-        .from('messages')
-        .select()
-        .order('id', { ascending: false });
-      list.innerHTML = "";
-      data.forEach(m => {
-        const li = document.createElement('li');
-        li.textContent = m.content;
-        list.appendChild(li);
-      });
-    }
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      await supabase.from('messages').insert({ content: input.value });
-      input.value = "";
-      loadMessages();
-    });
-
-    loadMessages();
-  </script>
+  <!-- Load Supabase client from CDN -->
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
