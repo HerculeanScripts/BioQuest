@@ -2,15 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Supabase Test</title>
+  <title>Supabase Local Test</title>
 </head>
 <body>
-  <h1>Supabase + Vercel Test</h1>
-  <button id="load">Load Data</button>
+  <h1>Supabase Test (Local Pi)</h1>
+  <button id="testBtn">Test Supabase</button>
   <pre id="output"></pre>
 
-  <!-- Load Supabase client from CDN -->
+  <!-- Load Supabase client -->
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <script src="script.js"></script>
+  <script>
+    // 🔑 Replace with your own Supabase project URL + anon key
+    const SUPABASE_URL = "https://vcdntubrkdrgixymkeod.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZG50dWJya2RyZ2l4eW1rZW9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY0MzIwMTQsImV4cCI6MjA3MjAwODAxNH0.qdrhEN0Jeb0r9JaBgGX-pXNr86L-ynKK_5qpX_sEMRQ";
+
+    // Initialize Supabase client
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById("testBtn").addEventListener("click", async () => {
+      try {
+      // First insert a row
+      const { data: insertData, error: insertError } = await supabase
+        .from("test_table")
+        .insert([{ name: "Hello from my Pi!" }]);
+
+      if (insertError) {
+        document.getElementById("output").textContent = "Insert error: " + insertError.message;
+        return;
+      }
+
+      // Then fetch all rows
+      const { data, error } = await supabase.from("test_table").select("*");
+
+      if (error) {
+        document.getElementById("output").textContent = "Select error: " + error.message;
+      } else {
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+      }
+    } catch (err) {
+      document.getElementById("output").textContent = "Exception: " + err.message;
+    }
+    });
+  </script>
 </body>
 </html>
